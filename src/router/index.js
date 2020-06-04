@@ -1,7 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import vueDebounce from "vue-debounce";
 
+Vue.use(vueDebounce);
 Vue.use(VueRouter);
 
 const routes = [

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section
+    <!-- <section
       class="hero is-medium is-primary is-bold"
       style="margin-bottom: 10px;"
     >
@@ -14,6 +14,10 @@
           </router-link>
         </div>
       </div>
+    </section> -->
+    <section class="container is-fluid filters">
+      <b-input v-debounce:1000ms="getCharacters" v-model="name" />
+      <p>Hello World {{ name }}</p>
     </section>
     <section class="container is-fluid">
       <div
@@ -52,9 +56,15 @@ export default {
   components: {
     "character-card": CharacterCard
   },
+  filters: {
+    charactersNameFilter(name) {
+      console.log(name);
+    }
+  },
   data() {
     return {
       characters: [],
+      name: "Mike",
       loading: true,
       page: 1,
       pages: "1",
@@ -63,7 +73,15 @@ export default {
   },
   methods: {
     testFilter() {
-      console.log("hello world");
+      console.log(this.name);
+    },
+    async getCharacters() {
+      let results = await getCharacter({
+        page: this.page,
+        name: this.name
+      });
+
+      this.characters = results.results;
     }
   },
   computed: {
