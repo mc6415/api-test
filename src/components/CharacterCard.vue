@@ -2,7 +2,9 @@
   <div>
     <transition-group tag="div" name="fade" class="characterCard columns">
       <div class="column is-two-thirds cardImage" :key="`${character.id}-img`">
-        <img :src="character.image" />
+        <router-link :to="`/character/${character.id}`"
+          ><img :src="character.image"
+        /></router-link>
       </div>
       <div class="column is-one-thirds" :key="character.id">
         {{ character.name }}

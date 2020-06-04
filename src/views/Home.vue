@@ -16,8 +16,7 @@
       </div>
     </section> -->
     <section class="container is-fluid filters">
-      <b-input v-debounce:1000ms="getCharacters" v-model="name" />
-      <p>Hello World {{ name }}</p>
+      <b-input v-debounce:1000ms="getCharacters" v-model="params.name" />
     </section>
     <section class="container is-fluid">
       <div
@@ -31,7 +30,7 @@
           v-for="(character, index) in chunk"
           :key="index"
         >
-          <transition name="bounce">
+          <transition name="fade">
             <character-card
               :character="character"
               v-show="!loading"
@@ -47,41 +46,43 @@
 
 <script>
 // @ is an alias to /src
-import { getCharacter } from "rickmortyapi";
 import _ from "lodash";
 import CharacterCard from "@/components/CharacterCard";
+import { get } from "axios";
 
 export default {
   name: "Home",
   components: {
     "character-card": CharacterCard
   },
-  filters: {
-    charactersNameFilter(name) {
-      console.log(name);
-    }
-  },
   data() {
     return {
       characters: [],
-      name: "Mike",
+      params: {
+        name: "",
+        page: 1
+      },
       loading: true,
-      page: 1,
       pages: "1",
       count: "1"
     };
   },
   methods: {
-    testFilter() {
-      console.log(this.name);
-    },
     async getCharacters() {
-      let results = await getCharacter({
-        page: this.page,
-        name: this.name
-      });
+      let options = {
+        params: this.params
+      };
 
-      this.characters = results.results;
+      try {
+        let res = await get(
+          "https://rickandmortyapi.com/api/character",
+          options
+        );
+
+        this.characters = res.data.results;
+      } catch (ex) {
+        this.characters = [];
+      }
     }
   },
   computed: {
@@ -90,10 +91,16 @@ export default {
     }
   },
   created: async function() {
-    const chars = await getCharacter({ page: 1 });
+    let options = {
+      params: this.params
+    };
 
-    this.characters = chars.results;
-    this.loading = false;
+    get("https://rickandmortyapi.com/api/character/", options).then(res => {
+      let { results } = res.data;
+
+      this.characters = results;
+      this.loading = false;
+    });
   }
 };
 </script>
