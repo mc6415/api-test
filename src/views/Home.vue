@@ -1,7 +1,7 @@
 <template>
   <div>
-    <!-- <section
-      class="hero is-medium is-primary is-bold"
+    <section
+      class="hero is-small is-primary is-bold"
       style="margin-bottom: 10px;"
     >
       <div class="hero-body">
@@ -14,9 +14,9 @@
           </router-link>
         </div>
       </div>
-    </section> -->
+    </section>
     <section class="container is-fluid filters">
-      <b-input v-debounce:1000ms="getCharacters" v-model="params.name" />
+      <b-input v-debounce:400ms="getCharacters" v-model="params.name" />
     </section>
     <section class="container is-fluid">
       <div
@@ -41,6 +41,15 @@
         </div>
       </div>
     </section>
+    <hr />
+    <section class="pagination">
+      <b-pagination
+        :total="count"
+        :current="params.page"
+        per-page="20"
+        rounded
+      />
+    </section>
   </div>
 </template>
 
@@ -60,7 +69,7 @@ export default {
       characters: [],
       params: {
         name: "",
-        page: 1
+        page: 2
       },
       loading: true,
       pages: "1",
@@ -96,10 +105,13 @@ export default {
     };
 
     get("https://rickandmortyapi.com/api/character/", options).then(res => {
-      let { results } = res.data;
+      let { results, info } = res.data;
+
+      console.log(info);
 
       this.characters = results;
       this.loading = false;
+      this.count = info.count;
     });
   }
 };
