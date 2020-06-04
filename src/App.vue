@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view />
+    <transition name="fade" mode="out-in" style="animation-duration: 0.5s">
+      <router-view />
+    </transition>
   </div>
 </template>
 
@@ -13,9 +15,11 @@ body {
 
 #app {
   background-color: #484953;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
 }
+
+@import "~vue2-animate/src/sass/vue2-animate.scss";
 
 @import "~bulma";
 @import "~buefy/src/scss/buefy";

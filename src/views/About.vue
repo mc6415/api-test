@@ -1,5 +1,11 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <router-link to="/">Test Link</router-link>
   </div>
 </template>
+
+<style lang="scss" scoped>
+div {
+  height: 100vh;
+}
+</style>

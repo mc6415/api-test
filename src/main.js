@@ -3,9 +3,7 @@ import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router";
 import Buefy from "buefy";
-import VueLodash from "vue-lodash";
 
-Vue.use(VueLodash);
 Vue.use(Buefy);
 
 Vue.config.productionTip = false;
