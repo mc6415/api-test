@@ -1,6 +1,21 @@
 <template>
   <div v-if="!loading">
-    <h1 class="title">{{ character.name }}</h1>
+    <section class="hero is-small is-info is-bold">
+      <div class="hero-head">
+        <router-link to="/">
+          <b-icon icon="arrow-left" size="is-large" class="backButton" />
+        </router-link>
+      </div>
+      <div class="hero-body">
+        <div class="container">
+          <img :src="character.image" class="is-small avatar" />
+          <h1 :class="`title ${character.status}`">
+            {{ character.name }} - {{ character.species }}
+            {{ character.gender }} - {{ character.status }}
+          </h1>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -15,19 +30,43 @@ export default {
       loading: true
     };
   },
-  beforeCreate: async function() {
+  beforeCreate: function() {
     let id = this.$route.params.id;
 
     get(`https://rickandmortyapi.com/api/character/${id}`).then(res => {
       this.character = res.data;
       this.loading = false;
     });
-
-    // this.character = char;
-    // console.log(this.character);
-    // this.loading = false;
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.backButton {
+  border-radius: 50%;
+  background-color: rgba(grey, 0.6);
+  margin-top: 10px;
+  margin-left: 10px;
+  color: black;
+}
+
+.hero-body {
+  text-align: center;
+}
+
+.title.Dead {
+  color: darkred;
+}
+
+.title.Alive {
+  color: darkgreen;
+}
+
+.title.unknown {
+  color: orange;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+</style>
