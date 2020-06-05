@@ -22,3 +22,11 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+### Testing production build
+To test the production build after building you can use a service such as serve and then use:
+
+```
+serve -s dist
+```
