@@ -1,15 +1,27 @@
 <template>
   <div>
-    <transition-group tag="div" name="fade" class="characterCard columns">
-      <div class="column is-two-thirds cardImage" :key="`${character.id}-img`">
-        <router-link :to="`/character/${character.id}`">
-          <img :src="character.image" />
-        </router-link>
+    <div
+      class="characterCard columns"
+      :style="{ background: `url(${character.image}) no-repeat center` }"
+      @click="$router.push(`/character/${character.id}`)"
+    >
+      <div class="column is-flex cardDetails" :key="`${character.id}-img`">
+        <div class="characterInfo">
+          <h1 class="is-size-6">{{ character.name }}</h1>
+          <b-icon
+            icon="account"
+            size="is-small"
+            :type="
+              (character.status === 'Alive' && 'is-success') ||
+                (character.status === 'Dead' && 'is-danger') ||
+                'is-warning'
+            "
+          />
+          {{ character.species }} {{ character.gender }} -
+          {{ character.status }}
+        </div>
       </div>
-      <div class="column is-one-third" :key="character.id">
-        {{ character.name }}
-      </div>
-    </transition-group>
+    </div>
   </div>
 </template>
 
@@ -22,13 +34,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.characterCard {
-  width: 22vw;
-  height: 20vw;
-  padding: 10px;
-}
-
 p {
   color: black;
+}
+
+.characterCard {
+  height: 275px;
+  display: flex;
+}
+
+.cardDetails {
+  height: 35%;
+  background-color: rgba(0, 0, 0, 0.6);
+  align-self: flex-end;
+}
+
+.cardDetails > p {
+  color: white;
+}
+
+.characterInfo {
+  align-self: center;
 }
 </style>
