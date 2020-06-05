@@ -6,9 +6,7 @@
     >
       <div class="hero-body">
         <div class="container">
-          <h1 class="title has-text-centered">
-            Rick And Morty API
-          </h1>
+          <h1 class="title has-text-centered">Rick And Morty API</h1>
           <router-link to="/about">
             <b-button>Test</b-button>
           </router-link>
@@ -16,7 +14,7 @@
       </div>
     </section>
     <section class="container is-fluid filters">
-      <b-input v-debounce:400ms="getCharacters" v-model="params.name" />
+      <b-input v-debounce:400ms="doSearch" v-model="name" />
     </section>
     <section class="container is-fluid">
       <div
@@ -43,12 +41,7 @@
     </section>
     <hr />
     <section class="pagination">
-      <b-pagination
-        :total="count"
-        :current="params.page"
-        per-page="20"
-        rounded
-      />
+      <b-pagination :total="count" :current.sync="page" per-page="20" rounded />
     </section>
   </div>
 </template>
@@ -67,19 +60,26 @@ export default {
   data() {
     return {
       characters: [],
-      params: {
-        name: "",
-        page: 2
-      },
+      name: "",
+      page: 1,
       loading: true,
       pages: "1",
       count: "1"
     };
   },
+  watch: {
+    page: function() {
+      this.getCharacters();
+    }
+  },
   methods: {
+    async doSearch() {
+      this.page = 1;
+      this.getCharacters();
+    },
     async getCharacters() {
       let options = {
-        params: this.params
+        params: _.pick(this, ["page", "name"])
       };
 
       try {
@@ -88,7 +88,11 @@ export default {
           options
         );
 
-        this.characters = res.data.results;
+        let { results, info } = res.data;
+
+        this.characters = results;
+        this.pages = info.pages;
+        this.count = info.count;
       } catch (ex) {
         this.characters = [];
       }
@@ -107,7 +111,7 @@ export default {
     get("https://rickandmortyapi.com/api/character/", options).then(res => {
       let { results, info } = res.data;
 
-      console.log(info);
+      // console.log(info);
 
       this.characters = results;
       this.loading = false;
